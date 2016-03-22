@@ -3,6 +3,7 @@
 import cv2
 import numpy as np
 import constants
+import math
 
 def get_center(contour):
     #get moments data from contour
@@ -17,6 +18,28 @@ def get_center(contour):
         center = (center_x, center_y)
     return center 
 
+def get_delta_x(x):
+    #returns difference of X value of center of the tracked object to the targets X value 
+    return constants.TARGET_X-x
+
+def get_delta_y(y):
+    #returns difference of Y value of center of the tracked object to the targets Y value 
+    return constants.TARGET_Y-y
+
+def get_offset_angle(center_x, center_y):
+    delta_x = get_delta_x(center_x)
+    tan_ratio = float(math.fabs(delta_x)/constants.DIST_CAM_TO_CENTER)
+    angle_radians = math.atan(tan_ratio)
+    degrees = float(angle_radians*constants.RADIAN_TO_DEGREE)
+    if(delta_x<0):
+        #direction = 1 #turn right
+        direction = "right"
+    else:
+        #direction = 0 #turn left
+        direction = "left"
+    
+    return (degrees, direction)
+    
 def main():
     cap = cv2.VideoCapture(0)
 
@@ -49,12 +72,18 @@ def main():
             #get center
             center = get_center(cnt)
             cv2.circle(frame, center, 3, (0,0,255), 2)
-            center_str_x = "x = "+str(center[0])
-            center_str_y = "y = "+str(center[1])
-            font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(frame, "Center", constants.TEXT_COORDINATE_1, font, 0.7, (0,0,255), 2)
-            cv2.putText(frame, center_str_x, constants.TEXT_COORDINATE_2, font, 0.7, (0,0,255), 2)
-            cv2.putText(frame, center_str_y, constants.TEXT_COORDINATE_3, font, 0.7, (0,0,255), 2)
+            if(center[0] != 0 and center[1]!=0):
+                center_str_x = "x = "+str(center[0])
+                center_str_y = "y = "+str(center[1])
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                cv2.putText(frame, "Center", constants.TEXT_COORDINATE_1, font, 0.7, (0,0,255), 2)
+                cv2.putText(frame, center_str_x, constants.TEXT_COORDINATE_2, font, 0.7, (0,0,255), 2)
+                cv2.putText(frame, center_str_y, constants.TEXT_COORDINATE_3, font, 0.7, (0,0,255), 2)
+                angle, direction = get_offset_angle(center[0], center[1])
+                cv2.putText(frame, "Angle: "+str(angle),constants.TEXT_COORDINATE_4, font, 0.7, (0,0,255), 2)
+                cv2.putText(frame, "Turn "+direction, constants.TEXT_COORDINATE_5, font, 0.7, (0,0,255), 2)
+
+
 
         
         #show image
