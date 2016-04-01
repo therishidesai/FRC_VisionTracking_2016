@@ -4,14 +4,16 @@ import math
 #This is the constants file that has allo f the important constants for the Tower Tracker.
 
 #Camera Constants
-CAM_EXPOSURE = 0.5
-CAM_BRIGHTNESS = 1.0
+CAM_EXPOSURE = 0.01
+CAM_BRIGHTNESS = 0.05
+#CAM_EXPOSURE=0.3
+#CAM_BRIGHTNESS=0.6
 CAM_WIDTH = 640
 CAM_HEIGHT = 480
 
 #Threshold values
-LOWER_GREEN = [50,100,100]
-UPPER_GREEN = [70,255,255]
+LOWER_GREEN = [30,100,100]
+UPPER_GREEN = [90,255,255]
 
 #Target values
 TARGET_X = 320
