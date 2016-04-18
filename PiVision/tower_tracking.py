@@ -55,14 +55,11 @@ def main():
     #cap.set(15, constants.CAM_EXPOSURE)
     logging.basicConfig(level=logging.DEBUG)
 
-    NetworkTable.setIPAddress('roboRIO-3256-FRC.local')
+    NetworkTable.setIPAddress('10.32.56.2')
     NetworkTable.setClientMode()
     NetworkTable.initialize()
 
     nt = NetworkTable.getTable('SmartDashboard')
-
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(('localhost', 8089))
 
     while cap.isOpened():
 
@@ -108,10 +105,8 @@ def main():
         cv2.imshow('mask', mask)
         cv2.imshow('HSV', hsv)
 
-        camera_feed = pickle.dumps(frame)
-        client_socket.sendall(struct.pack("L", len(data))+data)
         #close if delay in camera feed is too long
-        k = cv2.waitKey(5) & 0xFF
+        k = cv2.waitKey(1) & 0xFF
         if k == 27:
             break
 
