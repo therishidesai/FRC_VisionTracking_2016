@@ -5,10 +5,11 @@ import numpy as np
 import constants
 import math
 import logging
-from networktables import NetworkTable
+#from networktables import NetworkTable
 import socket
 import pickle
 import struct
+import time
 
 def get_center(contour):
     #get moments data from contour
@@ -46,20 +47,21 @@ def get_offset_angle(center_x, center_y):
     return (degrees, direction)
 
 def main():
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     #Set camera values
-    cap.set(3, constants.CAM_WIDTH)
-    cap.set(4, constants.CAM_HEIGHT)
-    cap.set(10, constants.CAM_BRIGHTNESS)
+    #cap.set(3, constants.CAM_WIDTH)
+    #cap.set(4, constants.CAM_HEIGHT)
+    #time.sleep(2)
+    #cap.set(10, constants.CAM_BRIGHTNESS)
     #cap.set(15, constants.CAM_EXPOSURE)
-    logging.basicConfig(level=logging.DEBUG)
+    #logging.basicConfig(level=logging.DEBUG)
+    #print cap.get(15)
+    #NetworkTable.setIPAddress('10.32.56.2')
+    #NetworkTable.setClientMode()
+    #NetworkTable.initialize()
 
-    NetworkTable.setIPAddress('10.32.56.2')
-    NetworkTable.setClientMode()
-    NetworkTable.initialize()
-
-    nt = NetworkTable.getTable('SmartDashboard')
+    #nt = NetworkTable.getTable('SmartDashboard')
 
     while cap.isOpened():
 
@@ -93,12 +95,12 @@ def main():
                 cv2.putText(frame, center_str_y, constants.TEXT_COORDINATE_3, font, 0.7, (0,0,255), 2)
                 angle, direction = get_offset_angle(center[0], center[1])
                 cv2.putText(frame, "Angle: "+str(angle),constants.TEXT_COORDINATE_4, font, 0.7, (0,0,255), 2)
-                nt.putNumber('CameraAngle', angle)
+                #nt.putNumber('CameraAngle', angle)
                 cv2.putText(frame, "Turn "+direction, constants.TEXT_COORDINATE_5, font, 0.7, (0,0,255), 2)
-                if direction == right:
+                '''if direction == right:
                     nt.putNumber('Direction', 0)
                 else:
-                    nt.putNumber('Direction', 1)
+                    nt.putNumber('Direction', 1)'''
 
         #show image
         cv2.imshow('frame',frame)
