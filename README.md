@@ -5,4 +5,4 @@ This is the on board goal tracker written in Python. The script tracks the goal 
 ## Angle Calculation
 The program calculates the distance between the center x value and the x value of the centroid of the tracked goal. With the calculated delta_x, the program then calculates the offset angle with the equation:
 
-offset_angle=(delta_x)/(240/tan(Horizontal_Field_of_View))
+offset_angle=arctan((delta_x)/(240/tan(Horizontal_Field_of_View)))
